@@ -40,6 +40,19 @@ let router = new VueRouter({
 		{
 			path: '/board_write',
 			component : httpVueLoader('components/board/board_write.vue')
+		},
+		{
+			path: '/logout',
+			beforeEnter: (to, from, next) => {
+				alert('로그아웃되었습니다.')
+				next('/')
+			}
 		}
-	]
+	],
+	scrollBehavior (to, from, savedPosition) {
+		return {
+			x: 0,
+			y: 0
+		}
+	}
 })
