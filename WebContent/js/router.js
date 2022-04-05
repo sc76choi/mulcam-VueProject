@@ -1,6 +1,5 @@
 
 let router = new VueRouter({
-	mode: "history",
 	routes : [
 		{
 			path : '/',

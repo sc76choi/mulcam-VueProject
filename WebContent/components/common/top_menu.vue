@@ -8,10 +8,10 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navMenu">
 		<ul class="navbar-nav">
-			<li class="nav-item">
-				<router-link to="/board_main" class="nav-link">자유게시판</router-link>
+			<li class="nav-item" v-for="obj in server_data">
+				<router-link to="/board_main" class="nav-link">{{obj.board_info_name}}</router-link>
 			</li>
-			<li class="nav-item">
+			<!-- <li class="nav-item">
 				<router-link to="/board_main" class="nav-link">유머게시판</router-link>
 			</li>
 			<li class="nav-item">
@@ -19,7 +19,7 @@
 			</li>
 			<li class="nav-item">
 				<router-link to="/board_main"  class="nav-link">스포츠게시판</router-link>
-			</li>
+			</li> -->
 		</ul>
 		
 		<ul class="navbar-nav ml-auto">
@@ -39,3 +39,24 @@
 	</div>
 </nav>
 </template>
+
+<script>
+module.exports = {
+	data: function() {
+		return {
+			server_data: []
+		}
+	},
+	created() {
+		
+		axios.get('server/get_board_info.jsp').then((response) => {
+			console.log("success", response.data)
+			this.server_data = response.data
+		})
+		.catch((error) => {
+			console.log("error", error)
+		})
+		
+	}
+}
+</script>
