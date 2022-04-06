@@ -13,7 +13,7 @@
 						<div class="form-group">
 							<label for="user_id">아이디</label>
 							<div class="input-group">
-								<input type="text" id="user_id" v-model="user_id" class="form-control"/>
+								<input type="text" id="user_id" v-model="user_id" class="form-control" @keydown="resetCheckId"/>
 								<div class="input-group-append">
 									<button type="button" @click="
 									check_user_id_exist" class="btn btn-primary">중복확인</button>
@@ -90,12 +90,42 @@
 					$("#user_id").focus()
 					return
 				}
-				alert('가입이 완료되었습니다.')
-				this.$router.push('/login')
+				
+				let params = new URLSearchParams()
+				params.append('user_name', this.user_name)
+				params.append('user_id', this.user_id)
+				params.append('user_pw', this.user_pw)
+				
+				axios.post('server/user/join_user.jsp', params).then((response) => {
+					console.log("response", response.data)
+					//alert("result" + response.data.result);
+					if(response.data.result == true) {
+						alert('가입이 완료되었습니다.')
+						this.$router.push('/login')
+					}
+				}).catch((error) => {
+					alert(error)
+				})
+				
 			},
 			check_user_id_exist: function() {
-				this.check_user_id = true
-				alert('아이디 중복확인 되었습니다.')
+				let params = new URLSearchParams()
+				params.append("user_id", this.user_id)
+				axios.post('server/user/check_user_id.jsp', params).then((response) => {
+					if(response.data.check_result  == true) {
+						this.user_id = '' 
+						$("#user_id").focus()
+						this.check_user_id = false
+						alert('(N) 사용할 수 없는 아이디 입니다.')
+					} else {
+						this.check_user_id = true
+						alert('(Y) 사용할 수 있는 아이디 입니다.')
+					}
+				})
+				
+			},
+			resetCheckId: function() {
+				this.check_user_id = false
 			}
 		}
 	

@@ -56,6 +56,9 @@
 					$("#user_pw").focus()
 					return
 				}
+				
+				
+				
 				alert('로그인되었습니다.')
 				this.$router.push('/')
 			}

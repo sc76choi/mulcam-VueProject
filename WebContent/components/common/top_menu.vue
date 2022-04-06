@@ -49,7 +49,7 @@ module.exports = {
 	},
 	created() {
 		
-		axios.get('server/get_board_info.jsp').then((response) => {
+		axios.get('server/board/get_board_info.jsp').then((response) => {
 			console.log("success", response.data)
 			this.server_data = response.data
 		})
