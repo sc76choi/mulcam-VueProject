@@ -57,10 +57,26 @@
 					return
 				}
 				
+				let params = new URLSearchParams()
+				params.append("user_id", this.user_id)
+				params.append("user_pw", this.user_pw)
+				console.log(params.get("user_id"), params.get("user_pw"))
+				
+				axios.post('server/user/login.jsp', params).then((response) => {
+					console.log("response.data.result", response.data.result)
+					if(response.data.result == false) {
+						alert('로그인에 실패하였습니다.')
+						this.user_id = ''
+						this.user_pw = ''
+						this.is_login_fail = true
+					} else {
+						this.is_login_fail = false
+						alert('로그인되었습니다.')
+						this.$router.push('/')
+					}
+				})
 				
 				
-				alert('로그인되었습니다.')
-				this.$router.push('/')
 			}
 		},
 

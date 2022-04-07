@@ -1,3 +1,11 @@
+let store = new Vuex.Store({
+	state: {
+		user_login_check: false,
+		user_id: '',
+		user_name: '',
+		user_idx: 0
+	}
+})
 
 let router = new VueRouter({
 	routes : [
