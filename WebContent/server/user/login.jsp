@@ -43,6 +43,7 @@
 		root.put("user_idx", rs.getInt("user_idx"));
 		root.put("user_id", rs.getString("user_id"));
 		root.put("user_pw", rs.getString("user_pw"));
+		root.put("user_name", rs.getString("user_name"));
 		
 		session.setAttribute("login_check", true);
 	}

@@ -52,6 +52,14 @@ let router = new VueRouter({
 			path: '/logout',
 			beforeEnter: (to, from, next) => {
 				alert('로그아웃되었습니다.')
+				
+				store.state.user_login_check = false
+				store.state.user_login_id = ''
+				store.state.user_login_name = ''
+				store.state.user_login_idx = 0
+				
+				sessionStorage.clear()
+				
 				next('/')
 			}
 		}

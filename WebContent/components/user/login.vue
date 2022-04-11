@@ -72,6 +72,19 @@
 					} else {
 						this.is_login_fail = false
 						alert('로그인되었습니다.')
+						
+						//서버가 전달한 데이터를 store에 담는다.
+						this.$store.state.user_login_check = true
+						this.$store.state.user_id = response.data.user_id;
+						this.$store.state.user_name = response.data.user_name;
+						this.$store.state.user_idx = response.data.user_idx;
+						
+						// 세션스토리지에도 저장한다.(새로고침 대비)
+						sessionStorage.user_login_check = true
+						sessionStorage.user_id = response.data.user_id
+						sessionStorage.user_name = response.data.user_name
+						sessionStorage.user_idx = response.data.user_idx
+						
 						this.$router.push('/')
 					}
 				})
