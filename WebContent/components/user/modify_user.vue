@@ -41,8 +41,8 @@
 	module.exports = {
 		data: function() {
 			return {
-				user_name: '홍길동',
-				user_id: 'abcd',
+				user_name: this.$store.state.user_name,
+				user_id: this.$store.state.user_id,
 				user_pw: '',
 				user_pw2: ''
 			}
@@ -70,12 +70,26 @@
 					return
 				}
 
-				alert('정보가 수정되었습니다.')
-				this.user_pw = ''
-				this.user_pw2 = ''
-				// this.$router.push('/')
+				let params = new URLSearchParams();
+				params.append("user_idx", this.$store.state.user_idx)
+				params.append("user_pw", this.user_pw)
+				
+				axios.post('server/user/modify_user.jsp', params).then((response) => {
+					if(response.data.result == true) {
+						alert('정보가 수정되었습니다.')
+						this.user_pw = ''
+						this.user_pw2 = ''
+						// this.$router.push('/')
+					}
+				})
+				
 			}
-
+		},
+		created() {
+			if(this.$store.state.user_login_check == false) {
+				alert('잘못된 접근입니다.')
+				this.$router.push('/')
+			}
 		}
 	}
 
