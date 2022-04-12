@@ -2,7 +2,7 @@
 <div class="container" style="margin-top:100px">
 	<div class="card shadow">
 		<div class="card-body">
-			<h4 class="card-title">게시판 이름</h4>
+			<h4 class="card-title">{{server_data.board_info_name}}</h4>
 			<table class="table table-hover" id='board_list'>
 				<thead>
 					<tr>
@@ -62,15 +62,38 @@
 	module.exports = {
 		data: function() {
 			return {
-				temp_list: [1,2,3,4,5,6,7,8,9,10]
+				temp_list: [1,2,3,4,5,6,7,8,9,10],
+				server_data : {}
+				
 			}
 		},
 		methods: {
 			go_board_read: function() {
 				<!-- alert('go_board_read') -->
 				this.$router.push("/board_read")
+			},
+			get_board_data : function() {
+				//alert("" + this.$route.params.board_info_idx)
+				let params = new URLSearchParams()
+				params.append("board_info_idx", this.$route.params.board_info_idx)
+				
+				axios.post('server/board/get_board_list.jsp', params).then((response) => {
+					this.server_data = response.data
+				})
 			}
-		}
+		},
+		// to, from은 주소와 관련된 정보가 있음
+		watch: {
+			'$route' (to, from) {
+				//alert(to + " " + from)
+				this.get_board_data()
+			}
+		},
+		// 이미 만들어진 component 를 사용해서 router가 변경되어도 감시 못함
+		created() {
+			this.get_board_data()
+		},
+		
 	}
 	
 
