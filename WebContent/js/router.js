@@ -45,7 +45,7 @@ let router = new VueRouter({
 			}
 		},
 		{
-			path: '/board_write',
+			path: '/board_write/:board_info_idx',
 			component : httpVueLoader('components/board/board_write.vue')
 		},
 		{

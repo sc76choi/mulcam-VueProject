@@ -9,10 +9,12 @@ $(function(){
 		store: store,
 		beforeCreate: function() {
 			if(sessionStorage.user_login_check != undefined) {
-				this.$store.state.user_login_check = sessionStorage.user_login_check
+				if(sessionStorage.user_login_check == 'true') {
+					this.$store.state.user_login_check = true
+				}
 				this.$store.state.user_login_id = sessionStorage.user_login_id
 				this.$store.state.user_login_pw = sessionStorage.user_login_pw
-				this.$store.state.user_login_idx = sessionStorage.user_login_idx
+				this.$store.state.user_login_idx = parseInt(sessionStorage.user_login_idx)
 			}
 		}
 	})

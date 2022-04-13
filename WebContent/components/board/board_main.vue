@@ -49,7 +49,7 @@
 			</div>
 			
 			<div class="text-right">
-				<router-link to="board_write" class="btn btn-primary">글쓰기</router-link>
+				<router-link :to="'/board_write/' + $route.params.board_info_idx" class="btn btn-primary" v-if='$store.state.user_login_check == true'>글쓰기</router-link>
 			</div>
 			
 		</div>
@@ -72,8 +72,11 @@
 				<!-- alert('go_board_read') -->
 				this.$router.push("/board_read")
 			},
+			// 게시판 이름가져오기
 			get_board_data : function() {
 				//alert("" + this.$route.params.board_info_idx)
+				
+				// 문자열 데이터만 담을 수 있음
 				let params = new URLSearchParams()
 				params.append("board_info_idx", this.$route.params.board_info_idx)
 				
