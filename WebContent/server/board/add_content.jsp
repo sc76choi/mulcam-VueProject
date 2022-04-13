@@ -53,6 +53,14 @@
 	
 	pstmt.execute();
 	
+	// 새롭게 추가된 글의 번호를 파악한다.
+	String sql2 = "select content_seq.currval as content_idx from dual ";
+	PreparedStatement pstmt2 = db.prepareStatement(sql2);
+	ResultSet rs2 = pstmt2.executeQuery();
+	rs2.next();
+	
+	int content_idx = rs2.getInt("content_idx");
+	
 	db.close();
     /* 
     params.append('board_writer_idx', this.$store.state.user_idx)
@@ -65,5 +73,6 @@
 	// out.print("s");
 %>
 {
-	"result" : true
+	"result" : true,
+	"content_idx": <%=content_idx%>
 }

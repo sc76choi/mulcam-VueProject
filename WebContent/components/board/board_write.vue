@@ -64,7 +64,7 @@
                 axios.post('server/board/add_content.jsp', params).then((response) => {
                 	if(response.data.result === true) {
 				    	alert('저장되었습니다.')
-		                this.$router.push('/board_read')
+		                this.$router.push('/board_read/' + this.$route.params.board_info_idx + '/1/' + response.data.content_idx)
 				    }
                 	
                 })
