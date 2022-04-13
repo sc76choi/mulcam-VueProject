@@ -14,8 +14,13 @@
 	Class.forName(driver);
 	Connection db = DriverManager.getConnection(url, id, pw);
 	
+	// 게시판 index 번호
 	String str1 = request.getParameter("board_info_idx");
 	int board_info_idx = Integer.parseInt(str1);
+	
+	// 페이지 번호
+	String str2 = request.getParameter("page");
+	int now_page = Integer.parseInt(str2);
 	
 	// 게시판 정보를 가져오는 부분
 	String sql = "select board_info_idx, board_info_name from board_info_table where board_info_idx = ?";
@@ -29,7 +34,7 @@
 	// 모든데이터를 담아 놓을 JSON Object
 	JSONObject root = new JSONObject();
 	
-	int i = 0;
+	//int i = 0;
 	rs.next();
 	//JSONObject obj = new JSONObject();
 	
@@ -38,16 +43,29 @@
 	
 	
 	// 게시글 목록을 가져오는 부분
-	String sql2 = "select a1.content_idx, a1.content_subject, "
+	String sql2 = "select p2.* "
+			    + "  from (select rownum as num, p1.* "
+				+	"   from (select a1.content_idx, a1.content_subject, "
 				+	"        to_char(a1.content_date, 'YYYY-MM-DD') as content_date, "
 				+	"        a2.user_name "
 				+	"  from content_table a1, user_table a2 "
 				+"    where a1.content_writer_idx = a2.user_idx "
-				+"	    and a1.content_board_idx = ?"
-				+"	  order by a1.content_idx desc";
+				+"	    and a1.content_board_idx = ? "
+				+"	  order by a1.content_idx desc) p1) p2 "
+			    +" where p2.num >= ? and p2.num <= ?  " ;
 	
+	
+	//0 : 1 ~ 10
+	//10 : 11 ~ 20
+	//20 : 21 ~ 30
+	int idx_min = (now_page - 1) * 10 + 1;
+	int idx_max = idx_min + 9;
+			    
 	PreparedStatement pstmt2 = db.prepareStatement(sql2);
 	pstmt2.setInt(1, board_info_idx);
+	pstmt2.setInt(2, idx_min);
+	pstmt2.setInt(3, idx_max);
+	
 	ResultSet rs2 = pstmt2.executeQuery();
 	
 	JSONArray board_list = new JSONArray();
@@ -62,6 +80,48 @@
 	}
 	
 	root.put("board_list", board_list);
+	
+	// 하단 페이지 번호들을 위한 데이터 셋팅
+	String sql3 = "select count(1) as cnt from content_table where content_board_idx = ? ";
+	PreparedStatement pstmt3 = db.prepareStatement(sql3);
+	pstmt3.setInt(1, board_info_idx);
+	
+	ResultSet rs3 = pstmt3.executeQuery();
+	rs3.next();
+	int cnt = rs3.getInt("cnt");
+	
+	int page_cnt = cnt /10;
+	if(page_cnt % 10 > 0) {
+		page_cnt++;
+	}
+	
+	if(page_cnt == 0) page_cnt++;
+	
+	// 1 ~ 10 : 1
+	// 11 ~ 20 : 2
+	// 21 ~ 30 : 3
+	int page_min = ((now_page - 1) / 10) * 10 + 1;
+	int page_max = page_min + 9;
+	
+	if(page_max > page_cnt) page_max = page_cnt;
+	
+	JSONArray page_array = new JSONArray();
+	for(int i = page_min; i <= page_max; i++) {
+		page_array.add(i);
+	}
+	
+	root.put("page_array", page_array);
+	
+	// 이전 버튼
+	int pre = page_min - 1;
+	if(pre < 1) pre = 1;
+	
+	// 다음 버튼
+	int next = page_max +1;
+	if (next > page_cnt) next = page_cnt;
+	
+	root.put("pre", pre);
+	root.put("next", next);
 	
 	db.close();
 %>

@@ -79,7 +79,7 @@
 						alert('정보가 수정되었습니다.')
 						this.user_pw = ''
 						this.user_pw2 = ''
-						// this.$router.push('/')
+						this.$router.push('/')
 					}
 				})
 				

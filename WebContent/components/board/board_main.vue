@@ -26,17 +26,18 @@
 			<div class="d-none d-md-block">
 				<ul class="pagination justify-content-center">
 					<li class="page-item">
-						<router-link to="/board_main" class="page-link">이전</router-link>
+						<router-link :to="'/board_main/' + $route.params.board_info_idx + '/' + server_data.pre" class="page-link">이전</router-link>
 					</li>
-					<li class="page-item" v-for="a1 in temp_list">
-						<router-link to="/board_main" class="page-link">{{a1}}</router-link>
+					<li class="page-item" v-for="pagenum in server_data.page_array">
+						<router-link :to="'/board_main/' + $route.params.board_info_idx + '/' + pagenum" class="page-link">{{pagenum}}</router-link>
 					</li>
 					<li class="page-item">
-						<router-link to="/board_main" class="page-link">다음</router-link>
+						<router-link :to="'/board_main/' + $route.params.board_info_idx + '/' + server_data.next" class="page-link">다음</router-link>
 					</li>
 				</ul>
 			</div>
 			
+			<!--
 			<div class="d-block d-md-none">
 				<ul class="pagination justify-content-center">
 					<li class="page-item">
@@ -47,6 +48,7 @@
 					</li>
 				</ul>
 			</div>
+			-->
 			
 			<div class="text-right">
 				<router-link :to="'/board_write/' + $route.params.board_info_idx" class="btn btn-primary" v-if='$store.state.user_login_check == true'>글쓰기</router-link>
@@ -79,6 +81,7 @@
 				// 문자열 데이터만 담을 수 있음
 				let params = new URLSearchParams()
 				params.append("board_info_idx", this.$route.params.board_info_idx)
+				params.append("page", this.$route.params.page)
 				
 				axios.post('server/board/get_board_list.jsp', params).then((response) => {
 					this.server_data = response.data
