@@ -27,9 +27,9 @@
 					</div>
 					<div class="form-group">
 						<div class="text-right">
-							<router-link :to="'/board_main/' + $route.params.board_info_idx + '/' + $route.params.page" class="btn btn-primary">목록보기</router-link>
-							<router-link to="board_modify" class="btn btn-info">수정하기</router-link>
-							<router-link to="board_delete" class="btn btn-danger">삭제하기</router-link>
+							<router-link :to="'/board_main/' + this.$route.params.board_info_idx + '/' + this.$route.params.page" class="btn btn-primary">목록보기</router-link>
+							<router-link :to="'/board_modify/' + this.$route.params.board_info_idx + '/' + this.$route.params.page + '/' + this.$route.params.content_idx" class="btn btn-info" v-if="server_data.content_writer_idx == $store.state.user_idx">수정하기</router-link>
+							<router-link :to="'/board_delete/' + this.$route.params.board_info_idx + '/' + this.$route.params.page + '/' + this.$route.params.content_idx" class="btn btn-danger" v-if="server_data.content_writer_idx == $store.state.user_idx">삭제하기</router-link>
 						</div>
 					</div>
 				</div>
